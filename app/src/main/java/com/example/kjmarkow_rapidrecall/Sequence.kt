@@ -11,13 +11,13 @@ class Sequence(
     var sequenceLength: Int
 ) {
 
-    public var sequenceArray: MutableList<Int> = generateSequence(sequenceLength)
-    public  var sequenceAttempt: MutableList<Int> = mutableListOf()
+    public var sequenceArray: MutableList<Char> = generateSequence(sequenceLength)
+    public  var sequenceAttempt: MutableList<Char> = mutableListOf()
     var currentSequenceState: SequenceState = SequenceState.CORRECT
     @OptIn(ExperimentalTime::class)
     private var FinishedTimestamp: Instant? = null
 
-    fun attemptSequenceElement(attempt: Int): SequenceState {
+    fun attemptSequenceElement(attempt: Char): SequenceState {
         if (currentSequenceState != SequenceState.COMPLETE) {
             sequenceAttempt.add(attempt)
             currentSequenceState = updateSequenceState()
@@ -27,11 +27,11 @@ class Sequence(
         }
     }
 
-    private fun generateSequence(sequenceLength: Int): MutableList<Int> {
-        var generatedSequence: MutableList<Int> = mutableListOf()
+    private fun generateSequence(sequenceLength: Int): MutableList<Char> {
+        var generatedSequence: MutableList<Char> = mutableListOf()
         for (i in 0..<sequenceLength) {
-            val randomDigit: Int = (0..10).random()
-            generatedSequence.add(randomDigit)
+            val randomDigit: Int = (0..9).random()
+            generatedSequence.add(randomDigit.digitToChar())
         }
         return generatedSequence
     }

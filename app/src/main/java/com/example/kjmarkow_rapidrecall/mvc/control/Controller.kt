@@ -11,5 +11,11 @@ class MyController(
     }
     fun changeScreen(screen: Int) {}
 
-    fun submitSequence(sequence: String) {}
+    fun submitSequence(sequence: String) {
+        model.attemptSequence(sequence)
+    }
+
+    fun startSequence(sequenceLength: Int) {
+        model.startSequence(sequenceLength)
+    }
 }

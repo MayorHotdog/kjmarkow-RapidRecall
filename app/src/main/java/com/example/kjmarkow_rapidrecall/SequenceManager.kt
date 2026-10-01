@@ -4,18 +4,23 @@ class SequenceManager(
     val sequenceLog: SequenceLog
 ) {
     var sequenceLength: Int = -1
-    private var currentSequence: Sequence? = null
+    var currentSequence: Sequence? = null
+
+
     private var currentSequenceState: SequenceState = SequenceState.CORRECT
-    fun attemptSequenceElement(attempt: Int) {
-        currentSequenceState = currentSequence?.attemptSequenceElement(attempt)!!
-        if (currentSequenceState == SequenceState.COMPLETE) {
-            sequenceLog.addSequence(currentSequence!!)
+    fun attemptSequence(attempt: String) {
+        for (char in attempt) {
+            currentSequenceState = currentSequence?.attemptSequenceElement(char)!!
+            if (currentSequenceState == SequenceState.COMPLETE) {
+                sequenceLog.addSequence(currentSequence!!)
+            }
         }
     }
 
     // Returns True when a new sequence was generated
-    fun generateNewSequence(): Boolean {
-        if (currentSequenceState != SequenceState.CORRECT) {
+    fun generateNewSequence(sequenceLengthPassed: Int): Boolean {
+        sequenceLength = sequenceLengthPassed
+        if (currentSequence == null) {
             currentSequence = Sequence(sequenceLength)
             currentSequenceState = currentSequence?.currentSequenceState!!
             return true
