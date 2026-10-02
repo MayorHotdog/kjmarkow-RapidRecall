@@ -16,6 +16,7 @@ class Sequence(
     var sequenceAttempt: MutableList<Char> = mutableListOf()
     var currentSequenceState: SequenceState = SequenceState.CORRECT
     var isCorrect: Boolean = false
+    var correctAmount: Int = 0
     @OptIn(ExperimentalTime::class)
      var FinishedTimestamp: Instant? = null
     fun attemptSequenceElement(attempt: Char): SequenceState {
@@ -60,12 +61,18 @@ class Sequence(
     }
 
     private fun getIsCorrect(): Boolean {
+        var matching = getAmountCorrect()
+        correctAmount = matching
+        return matching == sequenceLength
+    }
+
+    private fun getAmountCorrect(): Int{
         var matching: Int = 0
         for (i in 0..<sequenceLength) {
             if (sequenceArray[i] == sequenceAttempt[i]) {
                 matching += 1
             }
         }
-        return matching == sequenceLength
+        return matching
     }
-}
+ }

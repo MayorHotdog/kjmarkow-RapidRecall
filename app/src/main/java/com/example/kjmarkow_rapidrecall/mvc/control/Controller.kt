@@ -2,7 +2,7 @@ package com.example.kjmarkow_rapidrecall.mvc.control
 
 import com.example.kjmarkow_rapidrecall.mvc.model.MyModel
 enum class Screens {
-    MAIN, LOG
+    MAIN, LOG, SUMMARY
 }
 class MyController(
     private val model: MyModel
