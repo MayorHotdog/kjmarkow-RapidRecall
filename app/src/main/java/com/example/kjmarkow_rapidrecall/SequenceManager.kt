@@ -12,6 +12,7 @@ class SequenceManager(
         for (char in attempt) {
             currentSequenceState = currentSequence?.attemptSequenceElement(char)!!
         }
+        currentSequence?.sequenceCleanUp()
         sequenceLog.addSequence(currentSequence!!)
         currentSequence = null
 

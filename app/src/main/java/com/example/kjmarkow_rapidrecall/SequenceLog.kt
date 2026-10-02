@@ -8,4 +8,6 @@ class SequenceLog {
     fun removeSequence(sequence: Sequence) {
         loggedSequences.remove(sequence)
     }
+
+
 }

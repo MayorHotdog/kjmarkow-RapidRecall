@@ -1,16 +1,24 @@
 package com.example.kjmarkow_rapidrecall
 
+import android.R
 import android.os.Bundle
 import android.os.CountDownTimer
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -26,6 +34,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.kjmarkow_rapidrecall.mvc.control.MyController
 import com.example.kjmarkow_rapidrecall.mvc.control.Screens
@@ -35,6 +44,7 @@ import kotlinx.coroutines.delay
 import kotlin.concurrent.timer
 import kotlin.math.round
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.ExperimentalTime
 
 class MainActivity : ComponentActivity() {
     private lateinit var controller: MyController
@@ -78,7 +88,8 @@ fun MainScreen(modifier: Modifier = Modifier, controller: MyController, model: M
                 onClick = {
                     controller.changeScreen(Screens.LOG)
                     currentScreen = controller.currentScreen
-                }
+                },
+                enabled = !isTimer
             ) {
                 Text("Logs")
             }
@@ -167,9 +178,32 @@ fun MainScreen(modifier: Modifier = Modifier, controller: MyController, model: M
             ) {
                 Text("Back")
             }
-            for (sequence in model.SL.loggedSequences) {
-                Text("${sequence.sequenceArray}")
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(model.SL.loggedSequences) { sequence ->
+                    Card(Modifier.fillMaxWidth(0.8f)) {log_row(sequence)}
+                }
             }
+
         }
     }
+}
+
+@OptIn(ExperimentalTime::class)
+@Composable
+fun log_row(sequence: Sequence) {
+    Row() {
+        Column() {
+            Text("Correct: ${sequence.isCorrect}")
+            Text("Sequence Length: ${sequence.sequenceLength}")
+        }
+        Spacer(Modifier.width(50.dp))
+        Column() {
+            Text("Attempted Sequence:\t${sequence.sequenceAttempt}")
+            Text("Actual Sequence:\t${sequence.sequenceArray}")
+            Text("TimeStamp:${sequence.FinishedTimestamp}")
+        }
+
+    }
+
+
 }

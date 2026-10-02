@@ -1,5 +1,6 @@
 package com.example.kjmarkow_rapidrecall
 
+import kotlin.math.round
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
@@ -11,12 +12,12 @@ class Sequence(
     var sequenceLength: Int
 ) {
 
-    public var sequenceArray: MutableList<Char> = generateSequence(sequenceLength)
-    public  var sequenceAttempt: MutableList<Char> = mutableListOf()
+    var sequenceArray: MutableList<Char> = generateSequence(sequenceLength)
+    var sequenceAttempt: MutableList<Char> = mutableListOf()
     var currentSequenceState: SequenceState = SequenceState.CORRECT
+    var isCorrect: Boolean = false
     @OptIn(ExperimentalTime::class)
-    private var FinishedTimestamp: Instant? = null
-
+     var FinishedTimestamp: Instant? = null
     fun attemptSequenceElement(attempt: Char): SequenceState {
         if (currentSequenceState != SequenceState.COMPLETE) {
             sequenceAttempt.add(attempt)
@@ -36,7 +37,7 @@ class Sequence(
         return generatedSequence
     }
 
-    @OptIn(ExperimentalTime::class)
+
     private fun updateSequenceState(): SequenceState {
         // If the two sequences match return CORRECT
         // If the two sequences match, and they are both of the final length return COMPLETE
@@ -44,7 +45,6 @@ class Sequence(
         val sequenceAttemptLength = sequenceAttempt.size
         if (sequenceAttempt == sequenceArray.subList(0, sequenceAttemptLength)) {
             if (sequenceAttemptLength == sequenceLength) {
-                FinishedTimestamp = Clock.System.now()
                 return SequenceState.COMPLETE
             } else {
                 return SequenceState.CORRECT
@@ -52,5 +52,20 @@ class Sequence(
         } else {
             return SequenceState.INCORRECT
         }
+    }
+    @OptIn(ExperimentalTime::class)
+    fun sequenceCleanUp() {
+        FinishedTimestamp = Clock.System.now()
+        isCorrect = getIsCorrect()
+    }
+
+    private fun getIsCorrect(): Boolean {
+        var matching: Int = 0
+        for (i in 0..<sequenceLength) {
+            if (sequenceArray[i] == sequenceAttempt[i]) {
+                matching += 1
+            }
+        }
+        return matching == sequenceLength
     }
 }
