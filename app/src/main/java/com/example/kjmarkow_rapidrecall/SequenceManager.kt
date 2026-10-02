@@ -11,10 +11,10 @@ class SequenceManager(
     fun attemptSequence(attempt: String) {
         for (char in attempt) {
             currentSequenceState = currentSequence?.attemptSequenceElement(char)!!
-            if (currentSequenceState == SequenceState.COMPLETE) {
-                sequenceLog.addSequence(currentSequence!!)
-            }
         }
+        sequenceLog.addSequence(currentSequence!!)
+        currentSequence = null
+
     }
 
     // Returns True when a new sequence was generated
